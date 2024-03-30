@@ -4,7 +4,7 @@ SRC_DIR = ./impl
 INC_DIR = ./headers
 OBJ_DIR = ./obj
 BUILD_DIR = ./build
-EXEC = tetris_game
+EXEC = game
 
 # Listez tous les fichiers source
 SRCS := $(wildcard $(SRC_DIR)/*.cpp)
