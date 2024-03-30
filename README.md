@@ -12,17 +12,17 @@ The "board" of the game will simply be a straight line, extendable from left to 
 
 At each step, the game randomly generates a new piece, which the player must insert on the game board. For example, suppose the following configuration:
 
-[Diagram]
+![plateau](./imgs/img2.png)
 
 In this example, the four bottom pieces are already placed on the game board. The player must now place the new piece, the green square. He has two possibilities: either to the left, before the red square, or to the right, after the green circle.
 
 If three consecutive pieces have the same color or shape, then the three pieces disappear from the game board. For example, if the player chooses to place the green square to the right, and then chooses to place the next piece, the green triangle, to the right:
 
-[Diagram]
+![plateau](./imgs/img2_insert.png)
 
 The game board will change to the following configuration (as the three consecutive green pieces present have disappeared):
 
-[Diagram]
+![plateau](./imgs/img2_insert_delete.png)
 
 ### 3.3 Shifts
 
