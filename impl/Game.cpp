@@ -89,83 +89,208 @@ void Game::shiftLeft()
 void Game::removePiecesByColor(Piece &matchedPiece, DoubleLinkedList &colorList)
 {
     colorList.remove(matchedPiece);
-    colorList.remove(matchedPiece);
-    colorList.remove(matchedPiece);
 }
 
 void Game::removePiecesByShape(Piece &matchedPiece, DoubleLinkedList &shapeList)
 {
     shapeList.remove(matchedPiece);
-    shapeList.remove(matchedPiece);
-    shapeList.remove(matchedPiece);
 }
 
 void Game::checkAndRemoveMatches()
 {
+    // Obtenir la tête de la liste circulaire
     CircularLinkedList::Node *current = board.head;
-    CircularLinkedList::Node *next = current->next;
-    CircularLinkedList::Node *next_next = next->next;
 
-    while (next_next != current)
+    // Parcourir la liste circulaire
+    do
     {
-        if (current->piece.getShape() == next->piece.getShape() &&
-            current->piece.getShape() == next_next->piece.getShape())
+        // Obtenir les trois pièces consécutives
+        CircularLinkedList::Node *next = current->next;   // 2nd piece
+        CircularLinkedList::Node *next_next = next->next; // 3rd piece
+
+        if (next_next == nullptr || next_next == board.head)
         {
-            // Si trois pièces consécutives ont la même forme
-            Piece matchedPiece = current->piece;
-            board.remove(current->piece);
-            board.remove(next->piece);
-            board.remove(next_next->piece);
-
-            switch (matchedPiece.getShape())
-            {
-            case Shape::TRIANGLE:
-                removePiecesByShape(matchedPiece, shapeListTriangle);
-                break;
-            case Shape::DIAMOND:
-                removePiecesByShape(matchedPiece, shapeListDiamond);
-                break;
-            case Shape::CIRCLE:
-                removePiecesByShape(matchedPiece, shapeListCircle);
-                break;
-            case Shape::SQUARE:
-                removePiecesByShape(matchedPiece, shapeListSquare);
-                break;
-            }
-
-            score += 3;
+            return;
         }
-        if (current->piece.getColor() == next->piece.getColor() &&
-            current->piece.getColor() == next_next->piece.getColor())
-        {
-            // Si trois pièces consécutives ont la même couleur
-            Piece matchedPiece = current->piece;
-            board.remove(current->piece);
-            board.remove(next->piece);
-            board.remove(next_next->piece);
 
-            switch (matchedPiece.getColor())
+        // Vérifier si les trois pièces ont le même couleur
+        if ((current->piece.getColorAsString() == next->piece.getColorAsString() &&
+             next->piece.getColorAsString() == next_next->piece.getColorAsString()))
+        {
+
+            switch (current->piece.getColor())
             {
             case Color::RED:
-                removePiecesByColor(matchedPiece, colorListRed);
+                removePiecesByColor(current->piece, colorListRed);
+                removePiecesByColor(next->piece, colorListRed);
+                removePiecesByColor(next_next->piece, colorListRed);
                 break;
             case Color::YELLOW:
-                removePiecesByColor(matchedPiece, colorListYellow);
+                removePiecesByColor(current->piece, colorListYellow);
+                removePiecesByColor(next->piece, colorListYellow);
+                removePiecesByColor(next_next->piece, colorListYellow);
                 break;
             case Color::GREEN:
-                removePiecesByColor(matchedPiece, colorListGreen);
+                removePiecesByColor(current->piece, colorListGreen);
+                removePiecesByColor(next->piece, colorListGreen);
+                removePiecesByColor(next_next->piece, colorListGreen);
                 break;
             case Color::BLUE:
-                removePiecesByColor(matchedPiece, colorListBlue);
+                removePiecesByColor(current->piece, colorListBlue);
+                removePiecesByColor(next->piece, colorListBlue);
+                removePiecesByColor(next_next->piece, colorListBlue);
                 break;
             }
 
+            switch (current->piece.getShape())
+            {
+            case Shape::TRIANGLE:
+                removePiecesByShape(current->piece, shapeListTriangle);
+                break;
+            case Shape::DIAMOND:
+                removePiecesByShape(current->piece, shapeListDiamond);
+                break;
+            case Shape::CIRCLE:
+                removePiecesByShape(current->piece, shapeListCircle);
+                break;
+            case Shape::SQUARE:
+                removePiecesByShape(current->piece, shapeListSquare);
+                break;
+            }
+
+            switch (next->piece.getShape())
+            {
+            case Shape::TRIANGLE:
+                removePiecesByShape(next->piece, shapeListTriangle);
+                break;
+            case Shape::DIAMOND:
+                removePiecesByShape(next->piece, shapeListDiamond);
+                break;
+            case Shape::CIRCLE:
+                removePiecesByShape(next->piece, shapeListCircle);
+                break;
+            case Shape::SQUARE:
+                removePiecesByShape(next->piece, shapeListSquare);
+                break;
+            }
+
+            switch (next_next->piece.getShape())
+            {
+            case Shape::TRIANGLE:
+                removePiecesByShape(next_next->piece, shapeListTriangle);
+                break;
+            case Shape::DIAMOND:
+                removePiecesByShape(next_next->piece, shapeListDiamond);
+                break;
+            case Shape::CIRCLE:
+                removePiecesByShape(next_next->piece, shapeListCircle);
+                break;
+            case Shape::SQUARE:
+                removePiecesByShape(next_next->piece, shapeListSquare);
+                break;
+            }
+
+            // Supprimer les trois pièces de la liste circulaire
+            board.remove(current->piece);
+            board.remove(next->piece);
+            board.remove(next_next->piece);
+
+            // Incrémenter le score
             score += 3;
+
+            return;
         }
-        current = next;
-        next = next_next;
-        next_next = next_next->next;
-    }
+
+        // Vérifier si les trois pièces ont  la même forme
+        if ((current->piece.getShapeAsString() == next->piece.getShapeAsString() &&
+             next->piece.getShapeAsString() == next_next->piece.getShapeAsString()))
+        {
+            switch (current->piece.getShape())
+            {
+            case Shape::TRIANGLE:
+                removePiecesByShape(current->piece, shapeListTriangle);
+                removePiecesByShape(next->piece, shapeListTriangle);
+                removePiecesByShape(next_next->piece, shapeListTriangle);
+                break;
+            case Shape::DIAMOND:
+                removePiecesByShape(current->piece, shapeListDiamond);
+                removePiecesByShape(next->piece, shapeListDiamond);
+                removePiecesByShape(next_next->piece, shapeListDiamond);
+                break;
+            case Shape::CIRCLE:
+                removePiecesByShape(current->piece, shapeListCircle);
+                removePiecesByShape(next->piece, shapeListCircle);
+                removePiecesByShape(next_next->piece, shapeListCircle);
+                break;
+            case Shape::SQUARE:
+                removePiecesByShape(current->piece, shapeListSquare);
+                removePiecesByShape(next->piece, shapeListSquare);
+                removePiecesByShape(next_next->piece, shapeListSquare);
+                break;
+            }
+
+            switch (current->piece.getColor())
+            {
+            case Color::RED:
+                removePiecesByColor(current->piece, colorListRed);
+                break;
+            case Color::YELLOW:
+                removePiecesByColor(current->piece, colorListYellow);
+                break;
+            case Color::GREEN:
+                removePiecesByColor(current->piece, colorListGreen);
+                break;
+            case Color::BLUE:
+                removePiecesByColor(current->piece, colorListBlue);
+                break;
+            }
+
+            switch (next->piece.getColor())
+            {
+            case Color::RED:
+                removePiecesByColor(next->piece, colorListRed);
+                break;
+            case Color::YELLOW:
+                removePiecesByColor(next->piece, colorListYellow);
+                break;
+            case Color::GREEN:
+                removePiecesByColor(next->piece, colorListGreen);
+                break;
+            case Color::BLUE:
+                removePiecesByColor(next->piece, colorListBlue);
+                break;
+            }
+
+            switch (next_next->piece.getColor())
+            {
+            case Color::RED:
+                removePiecesByColor(next_next->piece, colorListRed);
+                break;
+            case Color::YELLOW:
+                removePiecesByColor(next_next->piece, colorListYellow);
+                break;
+            case Color::GREEN:
+                removePiecesByColor(next_next->piece, colorListGreen);
+                break;
+            case Color::BLUE:
+                removePiecesByColor(next_next->piece, colorListBlue);
+                break;
+            }
+
+            // Supprimer les trois pièces de la liste circulaire
+            board.remove(current->piece);
+            board.remove(next->piece);
+            board.remove(next_next->piece);
+
+            // Incrémenter le score
+            score += 3;
+
+            return;
+        }
+
+        current = current->next; // Passer à la pièce suivante
+
+    } while (current != board.head); // Boucler jusqu'à ce que nous revenions à la tête de la liste circulaire
 }
 
 void Game::displayBoard() const
@@ -235,29 +360,30 @@ void Game::shiftByShape()
 void Game::displayListsInfo() const
 {
 
-    std::cout << "Liste CircularLinkedList :" << std::endl;
+    std::cout << "Plateau :" << std::endl;
     board.display();
 
-    std::cout << "Listes de pièces :" << std::endl;
-    std::cout << "Listes DoubleLinkedList par couleur :" << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "Rouge : ";
+    std::cout << "---------------------Couleur--------------------------" << std::endl;
+
+    std::cout << "\033[31mRouge: \033[0m";
     colorListRed.display(); // Supposons que vous avez une méthode display() dans votre classe DoubleLinkedList
     std::cout << std::endl;
 
-    std::cout << "Jaune : ";
+    std::cout << "\033[33mJaune: \033[0m";
     colorListYellow.display();
     std::cout << std::endl;
 
-    std::cout << "Vert : ";
+    std::cout << "\033[32mVert: \033[0m";
     colorListGreen.display();
     std::cout << std::endl;
 
-    std::cout << "Bleu : ";
+    std::cout << "\033[34mBleu: \033[0m";
     colorListBlue.display();
     std::cout << std::endl;
 
-    std::cout << "Listes DoubleLinkedList par forme :" << std::endl;
+    std::cout << "-----------------------Forme------------------------" << std::endl;
 
     std::cout << "Triangle : ";
     shapeListTriangle.display();

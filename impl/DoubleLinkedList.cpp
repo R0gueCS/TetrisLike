@@ -20,6 +20,7 @@ DoubleLinkedList::~DoubleLinkedList()
 void DoubleLinkedList::insertAtHead(const Piece &piece)
 {
     Node *newNode = new Node(piece);
+
     if (head == nullptr)
     {
         head = newNode;
@@ -61,26 +62,64 @@ void DoubleLinkedList::insertAtTail(const Piece &piece)
 
 void DoubleLinkedList::remove(Piece &piece)
 {
-    if (head == nullptr)
+    if (isEmpty())
+    {
+        std::cout << "List is empty. Nothing to remove." << std::endl;
         return;
+    }
 
     Node *current = head;
-    do
+
+    bool found = false;
+
+    // Parcours de la liste pour trouver le nœud contenant la pièce à supprimer
+    while (current != nullptr)
     {
-        if (current->piece == piece)
+        if (current->piece == piece) // Si la pièce est trouvée
         {
-            current->prev->next = current->next;
-            current->next->prev = current->prev;
-            if (current == head)
-                head = current->next;
-            if (current == tail)
-                tail = current->prev;
-            delete current;
-            size--;
-            return;
+            found = true;
+            break;
         }
         current = current->next;
-    } while (current != head);
+    }
+
+    if (!found) // Si la pièce n'est pas trouvée dans la liste
+    {
+        return;
+    }
+
+    // Si le nœud à supprimer est la tête de la liste
+    if (current == head)
+    {
+        if (head->next == head)
+        { // Cas où il n'y a qu'un seul élément dans la liste
+            delete current;
+            head = nullptr;
+            tail = nullptr;
+        }
+        else
+        {
+            head = head->next;
+            head->prev = tail;
+            tail->next = head;
+            delete current;
+        }
+    }
+    else if (current == tail)
+    { // Si le nœud à supprimer est la queue de la liste
+        tail = tail->prev;
+        tail->next = head;
+        head->prev = tail;
+        delete current;
+    }
+    else
+    { // Si le nœud à supprimer est au milieu de la liste
+        current->prev->next = current->next;
+        current->next->prev = current->prev;
+        delete current;
+    }
+
+    size--; // Décrémentation de la taille de la liste
 }
 
 void DoubleLinkedList::shiftLeft()
@@ -106,13 +145,13 @@ bool DoubleLinkedList::isEmpty() const
 
 void DoubleLinkedList::display() const
 {
-    if (head == nullptr)
+    if (size == 0 || head == nullptr)
         return;
 
     Node *current = head;
     do
     {
-        std::cout << "Shape: " << static_cast<int>(current->piece.getShape()) << ", Color: " << static_cast<int>(current->piece.getColor()) << std::endl;
+        std::cout << "[ " << current->piece.getShapeAsString() << " | " << current->piece.getColorAsString() << " ] ";
         current = current->next;
     } while (current != head);
 }
