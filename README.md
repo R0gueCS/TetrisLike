@@ -26,25 +26,9 @@ The game board will change to the following configuration (as the three consecut
 
 ### 3.3 Shifts
 
-In addition to insertions to the left or right, the player can choose to make shifts in order to make deletions otherwise unattainable. Indeed, we propose the possibility of shifting all pieces of a certain shape to the left, or shifting all pieces of a certain color to the left. For example, if the game board is in this configuration:
-
-[Diagram]
-
-shifting for the greens consists of cyclically shifting to the left all shapes of green pieces, which will give the following configuration (where the square on the right has replaced the green circle, the green circle has replaced the leftmost green square, and the leftmost green square has "replaced" the rightmost green square):
-
-[Diagram]
-
-If now the player decides to make a shift for the squares, then we cyclically shift to the left all colors of the square pieces, which will give the following configuration:
-
-[Diagram]
-
-Note: if the player chooses to make a shift for the other shapes or colors, nothing will happen because there is only one triangle, circle, or diamond piece, and only one red, blue, yellow, or green piece.
+In addition to insertions to the left or right, the player can choose to make shifts in order to make deletions otherwise unattainable. Indeed, we propose the possibility of shifting all pieces of a certain shape to the left, or shifting all pieces of a certain color to the left.
 
 ### 3.4 Chaining of Pieces
-
-The pieces will be linked together by several (doubly) circular linked lists. Let's take an example:
-
-[Diagram]
 
 The pieces are linked together by a simple circular linked list made up of multiple player insertions (blue list). By keeping a pointer to the last one, we facilitate insertions to the left or right. Each piece knows the previous and next pieces having the same shape as itself. Thus, square pieces (resp. diamonds, triangles, circles) are linked together by a doubly circular linked list (in red). Each piece knows the previous and next pieces having the same color as itself. Thus, red pieces (resp. yellow, green, blue) are linked together by a doubly circular linked list (in black). These last two linkages facilitate shifts to the left.
 
