@@ -23,6 +23,8 @@ public:
     void insertAtHead(const Piece &piece);
     void insertAtTail(const Piece &piece);
     void remove(const Piece &piece); // Modifier la signature de la fonction remove
+    void shiftLeftByColor(Color color);
+    void shiftLeftByShape(Shape shape);
     bool isEmpty() const;
     void display() const;
     int getSize() const;

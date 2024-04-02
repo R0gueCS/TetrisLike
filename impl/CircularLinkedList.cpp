@@ -102,6 +102,104 @@ void CircularLinkedList::remove(const Piece &pieceToRemove)
     } while (current != head);
 }
 
+void CircularLinkedList::shiftLeftByColor(Color color)
+{
+    if (head == nullptr) // Check if the list is empty
+    {
+        std::cout << "The list is empty." << std::endl;
+        return;
+    }
+
+    Node *current = head;
+    Node *firstPiece = nullptr;
+    Node *firstPieceTemp = nullptr;
+    Node *lastPiece = nullptr;
+
+    // Find the first piece with the specified color
+    while (current->next != head)
+    {
+        if (current->piece.getColor() == color)
+        {
+            firstPiece = current;
+            break;
+        }
+        current = current->next;
+    }
+
+    firstPieceTemp = new Node(firstPiece->piece);
+    std::cout << "First piece: " << firstPiece->piece.getShapeAsString() << " " << firstPiece->piece.getColorAsString() << std::endl; // Debugging
+
+    // Find the last piece with the specified color
+
+    current = head;
+    while (current->next != head)
+    {
+        if (current->piece.getColor() == color)
+        {
+            lastPiece = current; // Update lastPiece when encountering a piece with the specified color
+        }
+        current = current->next;
+    }
+
+    std::cout << "Last piece: " << lastPiece->piece.getShapeAsString() << " " << lastPiece->piece.getColorAsString() << std::endl; // Debugging
+
+    // If no piece with the specified color is found
+    if (firstPiece == nullptr)
+    {
+        std::cout << "No piece with the specified color is found." << std::endl;
+        return;
+    }
+
+    // Iterate through the list starting from the next piece after the first piece
+    current = firstPiece->next;
+    while (current != head)
+    {
+        if (current->piece.getColor() == color)
+        {
+            // Move the data of the current piece to the previous piece
+            firstPiece->piece = current->piece;
+            firstPiece = current;
+        }
+        current = current->next;
+    }
+
+    // Swap the data between the first and last pieces with the same color
+    if (lastPiece != nullptr || firstPieceTemp != nullptr || lastPiece != firstPiece)
+    {
+        // Swap the shape
+        Piece pieceTemp = firstPieceTemp->piece;
+        firstPieceTemp->piece = lastPiece->piece;
+        lastPiece->piece = pieceTemp;
+    }
+}
+
+void CircularLinkedList::shiftLeftByShape(Shape shape)
+{
+    // if (head == nullptr) // Vérifier si la liste est vide
+    // {
+    //     std::cout << "La liste est vide." << std::endl;
+    //     return;
+    // }
+
+    // Node *current = head;
+    // do
+    // {
+    //     if (current->piece.getShape() == shape) // Vérifier si la pièce a la couleur spécifiée
+    //     {
+    //         current = current->next;
+    //         continue; // Passer à l'itération suivante
+    //     }
+
+    //     current->piece.getShape();
+
+    //     // Déplacer la pièce vers la gauche
+    //     Node *temp = current;
+    //     current = current->next;
+    //     remove(temp->piece);       // Retirer la pièce actuelle
+    //     insertAtTail(temp->piece); // Insérer la pièce à la fin
+    // } while (current != head);     // Arrêter lorsque nous revenons à la tête
+}
+
 bool CircularLinkedList::isEmpty() const
 {
     return head == nullptr;

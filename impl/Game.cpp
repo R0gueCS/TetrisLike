@@ -309,25 +309,33 @@ void Game::shiftByColor()
     std::cout << "Do you want to shift by red, yellow, green, or blue? (r/y/g/b): ";
     std::cin >> choice;
     DoubleLinkedList *colorList = nullptr;
+    Color color;
+
     switch (choice)
     {
     case 'r':
         colorList = &colorListRed;
+        color = Color::RED;
         break;
     case 'y':
         colorList = &colorListYellow;
+        color = Color::YELLOW;
         break;
     case 'g':
         colorList = &colorListGreen;
+        color = Color::GREEN;
         break;
     case 'b':
         colorList = &colorListBlue;
+        color = Color::BLUE;
         break;
     default:
         std::cout << "Invalid choice." << std::endl;
         return;
     }
+
     colorList->shiftLeft();
+    board.shiftLeftByColor(color);
 }
 
 void Game::shiftByShape()
@@ -336,25 +344,33 @@ void Game::shiftByShape()
     std::cout << "Do you want to shift by triangle, diamond, circle, or square? (t/d/c/s): ";
     std::cin >> choice;
     DoubleLinkedList *shapeList = nullptr;
+    Shape shape;
+
     switch (choice)
     {
     case 't':
         shapeList = &shapeListTriangle;
+        shape = Shape::TRIANGLE;
         break;
     case 'd':
         shapeList = &shapeListDiamond;
+        shape = Shape::DIAMOND;
         break;
     case 'c':
         shapeList = &shapeListCircle;
+        shape = Shape::CIRCLE;
         break;
     case 's':
         shapeList = &shapeListSquare;
+        shape = Shape::SQUARE;
         break;
     default:
         std::cout << "Invalid choice." << std::endl;
         return;
     }
+
     shapeList->shiftLeft();
+    board.shiftLeftByShape(shape);
 }
 
 void Game::displayListsInfo() const
